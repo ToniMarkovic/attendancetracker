@@ -1,11 +1,9 @@
 import React from 'react';
 import {View, Text, Pressable} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios, {all} from 'axios';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const Profile = ({navigation}) => {
-  const [attendances, setAttendances] = React.useState([]);
-
   const removeToken = async () => {
     try {
       await AsyncStorage.removeItem('authToken');
@@ -14,30 +12,27 @@ const Profile = ({navigation}) => {
       console.log('Error removing token', error);
     }
   };
-
-  React.useEffect(() => {
-    getAllAttendance();
-  }, []);
-  const getAllAttendance = async () => {
-    try {
-      const response = await axios.get('http://192.168.1.181:3001/attendance');
-      setAttendances(response.data.allAttendances);
-    } catch (error) {
-      console.log('error', error);
-    }
-  };
   return (
-    <View>
-      <Text>User Profile</Text>
-      {attendances.length > 0 ? (
-        <View>
-          <Text>Ima nesto</Text>
+    <View style={{padding: 10}}>
+      <Text style={{textAlign: 'center', marginTop: 20, fontSize: 24}}>
+        Odaberite kolegij
+      </Text>
+      <Pressable onPress={() => navigation.navigate('Details')}>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginTop: 40,
+            backgroundColor: '#6699CC',
+            padding: 10,
+            borderRadius: 10,
+          }}>
+          <Text style={{flex: 1, color: '#fff', fontSize: 16}}>
+            Ugradbeni Računalni sustavi
+          </Text>
+          <Icon name="book-outline" size={25} color="white" />
         </View>
-      ) : (
-        <View>
-          <Text>Nema nista</Text>
-        </View>
-      )}
+      </Pressable>
       <Pressable
         onPress={removeToken}
         style={{
@@ -47,6 +42,7 @@ const Profile = ({navigation}) => {
           borderRadius: 6,
           marginLeft: 'auto',
           marginRight: 'auto',
+          marginTop: 350,
         }}>
         <Text
           style={{

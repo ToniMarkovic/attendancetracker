@@ -5,6 +5,7 @@ import Game from './components/Game';
 import Login from './screens/(auth)/Login';
 import Register from './screens/(auth)/Register';
 import Profile from './screens/(profile)/Profile';
+import Details from './screens/(profile)/Details';
 import AndroidPrompt from './components/AndroidPrompt';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -90,6 +91,12 @@ const App = props => {
           name="Profile"
           component={Profile}
           options={{title: 'Profile'}}
+        />
+
+        <Stack.Screen
+          name="Details"
+          component={Details}
+          options={{title: 'Details'}}
         />
       </Stack.Navigator>
     </NavigationContainer>
