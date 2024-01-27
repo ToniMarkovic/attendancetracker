@@ -9,10 +9,39 @@ import {
   Pressable,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = ({navigation}) => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+
+  React.useEffect(() => {
+    const checkLoginStatus = async () => {
+      try {
+        const token = await AsyncStorage.getItem('authToken');
+        if (token) {
+          navigation.navigate('Profile');
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    checkLoginStatus();
+  }, []);
+
+  const handleLogin = () => {
+    const user = {
+      email: email,
+      password: password,
+    };
+
+    axios.post('http://192.168.1.181:3001/login', user).then(response => {
+      const token = response.data.token;
+      AsyncStorage.setItem('authToken', token);
+    });
+  };
   return (
     <SafeAreaView
       style={{
@@ -94,6 +123,7 @@ const Login = ({navigation}) => {
 
           <View style={{marginTop: 60}}>
             <Pressable
+              onPress={handleLogin}
               style={{
                 width: 200,
                 backgroundColor: '#6699CC',

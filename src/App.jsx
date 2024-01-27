@@ -4,6 +4,7 @@ import nfcManager from 'react-native-nfc-manager';
 import Game from './components/Game';
 import Login from './screens/(auth)/Login';
 import Register from './screens/(auth)/Register';
+import Profile from './screens/(profile)/Profile';
 import AndroidPrompt from './components/AndroidPrompt';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -83,6 +84,12 @@ const App = props => {
           name="Register"
           component={Register}
           options={{title: 'Register'}}
+        />
+
+        <Stack.Screen
+          name="Profile"
+          component={Profile}
+          options={{title: 'Profile'}}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -25,7 +25,7 @@ const Register = ({navigation}) => {
     console.log(user);
 
     axios
-      .post('http://localhost:3001/register', user)
+      .post('http://192.168.1.181:3001/register', user)
       .then(response => {
         console.log(response);
         Alert.alert(

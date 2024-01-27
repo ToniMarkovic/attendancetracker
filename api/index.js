@@ -80,11 +80,43 @@ app.post('/login', async (req, res) => {
       return res.status(401).json({message: 'Invalid password'});
     }
 
-    const token = jwt.sign({userId: user_id}, secretKey);
+    const token = jwt.sign({userId: user._id}, secretKey);
 
-    res.status(200).json(token);
+    res.status(200).json({token});
   } catch (error) {
     console.log('Login failed', error);
     res.status(500).json({message: 'Login failed'});
+  }
+});
+
+app.post('/attendance', async (req, res) => {
+  try {
+    const {studentName} = req.body;
+
+    const newAttendance = new Attendance({
+      studentName,
+    });
+
+    await newAttendance.save();
+
+    res.status(200).json({message: 'Attendance added successfully'});
+  } catch (error) {
+    res.status(500).json({message: 'Attendance not added'});
+  }
+});
+
+app.get('/attendance', async (req, res) => {
+  try {
+    // const userId = req.params.userId
+
+    // const user = await User.findById(userId).populate("attendance");
+    // if(!user) {
+    //   return res.status(404).json({ error: "User not found"});
+    // }
+    const allAttendances = await Attendance.find();
+
+    res.status(200).json({allAttendances});
+  } catch (error) {
+    res.status(500).json({error: 'Something went wrong'});
   }
 });

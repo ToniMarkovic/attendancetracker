@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import nfcManager, {NfcEvents} from 'react-native-nfc-manager';
 import AndroidPrompt from './AndroidPrompt';
+import axios from 'axios';
 
 const Game = ({navigation}) => {
   const [studentName, setStudentName] = React.useState('');
@@ -18,7 +19,6 @@ const Game = ({navigation}) => {
     let count = 1;
     nfcManager.setEventListener(NfcEvents.DiscoverTag, tag => {
       count--;
-      console.log('NFC TAG CONTNET', tag);
 
       if (tag.ndefMessage && tag.ndefMessage.length > 0) {
         const firstRecord = tag.ndefMessage[0];
@@ -60,6 +60,30 @@ const Game = ({navigation}) => {
       androidPromptRef.current.setVisible(true);
     }
   }
+
+  React.useEffect(() => {
+    const addAttendance = async () => {
+      try {
+        const attendanceData = {
+          studentName: studentName,
+        };
+        axios
+          .post('http://192.168.1.181:3001/attendance', attendanceData)
+          .then(response => {
+            console.log(response);
+          })
+          .catch(error => {
+            console.log('error', error);
+          });
+
+        setStudentName('');
+      } catch (error) {
+        console.log('error', error);
+      }
+    };
+
+    addAttendance();
+  }, [studentName]);
 
   return (
     <View style={styles.wrapper}>
