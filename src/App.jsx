@@ -69,11 +69,7 @@ const App = props => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen
-          name="Home"
-          component={Game}
-          options={{title: 'Welcome'}}
-        />
+        <Stack.Screen name="Home" component={Game} />
 
         <Stack.Screen
           name="Login"
@@ -90,7 +86,7 @@ const App = props => {
         <Stack.Screen
           name="Profile"
           component={Profile}
-          options={{title: 'Profile'}}
+          options={{title: 'Profile', headerBackVisible: false}}
         />
 
         <Stack.Screen

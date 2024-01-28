@@ -35,9 +35,9 @@ const Game = ({navigation}) => {
       }
 
       if (Platform.OS === 'android') {
-        androidPromptRef.current.setHintText(`Skeniranje...`);
+        androidPromptRef.current.setHintText(`Skeniraj NFC`);
       } else {
-        nfcManager.setAlertMessageIOS(`Skeniranje...`);
+        nfcManager.setAlertMessageIOS(`Skeniraj NFC`);
       }
 
       if (count <= 0) {
@@ -87,11 +87,17 @@ const Game = ({navigation}) => {
 
   return (
     <View style={styles.wrapper}>
-      <Button title="Login" onPress={() => navigation.navigate('Login')} />
-      <Text>NFC Game</Text>
-      <Text>{studentName}</Text>
+      <Text style={styles.title}>
+        <Text style={styles.firstPart}>Student</Text>
+        <Text style={styles.secondPart}>Flow</Text>
+      </Text>
+      <TouchableOpacity
+        style={styles.loginButton}
+        onPress={() => navigation.navigate('Login')}>
+        <Text style={styles.loginText}>Prijava</Text>
+      </TouchableOpacity>
       <TouchableOpacity style={styles.btn} onPress={scanTag}>
-        <Text>START</Text>
+        <Text style={styles.scanText}>Skeniraj</Text>
       </TouchableOpacity>
       <AndroidPrompt
         ref={androidPromptRef}
@@ -107,13 +113,45 @@ const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    marginTop: 40,
+    gap: 90,
   },
   btn: {
-    margin: 15,
-    padding: 15,
-    borderRadius: 8,
-    backgroundColor: '#cc',
+    backgroundColor: '#32de84',
+    height: 100,
+    width: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 50,
+  },
+  loginButton: {
+    backgroundColor: '#6699CC',
+    height: 70,
+    width: 150,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 12,
+  },
+  loginText: {
+    fontSize: 24,
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  scanText: {
+    fontSize: 22,
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  title: {
+    fontSize: 32,
+    textTransform: 'uppercase',
+    fontWeight: 'bold',
+  },
+  firstPart: {
+    color: '#6699CC',
+  },
+  secondPart: {
+    color: '#32de84',
   },
 });
 

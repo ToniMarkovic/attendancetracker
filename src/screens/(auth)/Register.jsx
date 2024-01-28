@@ -53,13 +53,13 @@ const Register = ({navigation}) => {
       }}>
       <View style={{marginTop: 30}}>
         <Text style={{fontSize: 16, fontWeight: '500', color: '#0066b2'}}>
-          Register
+          Registracija
         </Text>
       </View>
       <KeyboardAvoidingView>
         <View style={{alignItems: 'center'}}>
           <Text style={{fontSize: 16, fontWeight: '600', marginTop: 20}}>
-            Register to your account
+            Napravite svoj korisnički račun
           </Text>
         </View>
 
@@ -88,7 +88,7 @@ const Register = ({navigation}) => {
               width: 290,
               fontSize: 20,
             }}
-            placeholder="Enter your name"
+            placeholder="Unesite ime i prezime"
           />
         </View>
 
@@ -118,7 +118,7 @@ const Register = ({navigation}) => {
                 width: 290,
                 fontSize: 20,
               }}
-              placeholder="Enter your email"
+              placeholder="Unesite email"
             />
           </View>
 
@@ -148,7 +148,7 @@ const Register = ({navigation}) => {
                 width: 290,
                 fontSize: 20,
               }}
-              placeholder="Enter your password"
+              placeholder="Unesite lozinku"
             />
           </View>
 
@@ -170,7 +170,7 @@ const Register = ({navigation}) => {
                   fontWeight: 'bold',
                   fontSize: 16,
                 }}>
-                Register
+                Registracija
               </Text>
             </Pressable>
 
@@ -178,7 +178,7 @@ const Register = ({navigation}) => {
               style={{marginTop: 15}}
               onPress={() => navigation.navigate('Login')}>
               <Text style={{textAlign: 'center', fontSize: 15, color: 'gray'}}>
-                Already have an account? Sign In
+                Već imate korisnički račun? Prijavite se
               </Text>
             </Pressable>
           </View>

@@ -16,31 +16,22 @@ const Login = ({navigation}) => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
-  React.useEffect(() => {
-    const checkLoginStatus = async () => {
-      try {
-        const token = await AsyncStorage.getItem('authToken');
-        if (token) {
-          navigation.navigate('Profile');
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    checkLoginStatus();
-  }, []);
-
-  const handleLogin = () => {
+  const handleLogin = async () => {
     const user = {
       email: email,
       password: password,
     };
 
-    axios.post('http://192.168.1.181:3001/login', user).then(response => {
-      const token = response.data.token;
-      AsyncStorage.setItem('authToken', token);
-    });
+    try {
+      axios.post('http://192.168.1.181:3001/login', user).then(response => {
+        const token = response.data.token;
+        AsyncStorage.setItem('authToken', token);
+      });
+
+      navigation.navigate('Profile');
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <SafeAreaView
@@ -51,13 +42,13 @@ const Login = ({navigation}) => {
       }}>
       <View style={{marginTop: 80}}>
         <Text style={{fontSize: 16, fontWeight: '500', color: '#0066b2'}}>
-          Login
+          Prijava
         </Text>
       </View>
       <KeyboardAvoidingView>
         <View style={{alignItems: 'center'}}>
           <Text style={{fontSize: 16, fontWeight: '600', marginTop: 20}}>
-            Log in to your account
+            Prijavite se pomoću svog računa
           </Text>
         </View>
 
@@ -87,7 +78,7 @@ const Login = ({navigation}) => {
                 width: 290,
                 fontSize: 20,
               }}
-              placeholder="Enter your email"
+              placeholder="Unesite email"
             />
           </View>
 
@@ -117,7 +108,7 @@ const Login = ({navigation}) => {
                 width: 290,
                 fontSize: 20,
               }}
-              placeholder="Enter your password"
+              placeholder="Unesite lozinku"
             />
           </View>
 
@@ -139,7 +130,7 @@ const Login = ({navigation}) => {
                   fontWeight: 'bold',
                   fontSize: 16,
                 }}>
-                Login
+                Prijava
               </Text>
             </Pressable>
 
@@ -147,7 +138,7 @@ const Login = ({navigation}) => {
               style={{marginTop: 15}}
               onPress={() => navigation.navigate('Register')}>
               <Text style={{textAlign: 'center', fontSize: 15, color: 'gray'}}>
-                Don't have an account? Sign Up
+                Nemate korisnički račun? Registrirajte se
               </Text>
             </Pressable>
           </View>

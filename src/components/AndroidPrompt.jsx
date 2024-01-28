@@ -28,14 +28,14 @@ const AndroidPrompt = (props, ref) => {
         <View style={[styles.backdrop, StyleSheet.absoluteFill]} />
 
         <View style={styles.prompt}>
-          <Text style={styles.hint}>{hintText || 'Hello NFC'}</Text>
+          <Text style={styles.hint}>{hintText || 'Skeniraj NFC'}</Text>
 
           <TouchableOpacity
             style={styles.btn}
             onPress={() => {
               setVisible(false), setHintText(''), onCancelPress();
             }}>
-            <Text>CANCEL</Text>
+            <Text>ODUSTANI</Text>
           </TouchableOpacity>
         </View>
       </View>
