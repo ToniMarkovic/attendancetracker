@@ -35,6 +35,7 @@ const Register = ({navigation}) => {
         setName('');
         setEmail('');
         setPassword('');
+        navigation.navigate('Login');
       })
       .catch(error => {
         Alert.alert(

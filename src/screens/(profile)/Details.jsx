@@ -23,8 +23,8 @@ const Details = () => {
 
   const getAllAttendance = async () => {
     try {
-      const response = await axios.get('http://192.168.1.181:3001/attendance');
-      setAttendances(response.data.allAttendances);
+      const response = await axios.get('http://192.168.1.181:3001/user/posts');
+      setAttendances(response.data.userAttendances);
     } catch (error) {
       console.log('error', error);
     }

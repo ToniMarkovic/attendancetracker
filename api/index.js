@@ -59,13 +59,7 @@ app.post('/register', async (req, res) => {
   }
 });
 
-const generateSecretKey = () => {
-  const secretKey = crypto.randomBytes(32).toString('hex');
-
-  return secretKey;
-};
-
-const secretKey = generateSecretKey();
+const secretKey = 'my_secret_key';
 
 app.post('/login', async (req, res) => {
   try {
@@ -80,7 +74,7 @@ app.post('/login', async (req, res) => {
       return res.status(401).json({message: 'Invalid password'});
     }
 
-    const token = jwt.sign({userId: user._id}, secretKey);
+    const token = jwt.sign({userId: user._id, username: user.name}, secretKey);
 
     res.status(200).json({token});
   } catch (error) {
@@ -107,16 +101,26 @@ app.post('/attendance', async (req, res) => {
 
 app.get('/attendance', async (req, res) => {
   try {
-    // const userId = req.params.userId
-
-    // const user = await User.findById(userId).populate("attendance");
-    // if(!user) {
-    //   return res.status(404).json({ error: "User not found"});
-    // }
     const allAttendances = await Attendance.find();
 
     res.status(200).json({allAttendances});
   } catch (error) {
     res.status(500).json({error: 'Something went wrong'});
+  }
+});
+
+app.get('/user/posts', async (req, res) => {
+  try {
+    const token = req.headers.authorization.split(' ')[1];
+
+    const decodedToken = jwt.verify(token, secretKey);
+    const studentName = decodedToken.username;
+
+    const userAttendances = await Attendance.find({studentName});
+
+    res.status(200).json({userAttendances});
+  } catch (error) {
+    console.log('Error fetching user posts', error);
+    res.status(500).json({message: 'Error fetching user posts'});
   }
 });
