@@ -34,9 +34,6 @@ const Attendance = require('./models/attendance');
 app.post('/register', async (req, res) => {
   try {
     const {name, email, password} = req.body;
-    console.log('Name', name);
-    console.log('Email', email);
-    console.log('Password', password);
 
     // check if email is already registered
     const existingUser = await User.findOne({email});
@@ -74,7 +71,10 @@ app.post('/login', async (req, res) => {
       return res.status(401).json({message: 'Invalid password'});
     }
 
-    const token = jwt.sign({userId: user._id, username: user.name}, secretKey);
+    const token = jwt.sign(
+      {userId: user._id, username: user.name, professor: user.professor},
+      secretKey,
+    );
 
     res.status(200).json({token});
   } catch (error) {
@@ -101,9 +101,9 @@ app.post('/attendance', async (req, res) => {
 
 app.get('/attendance', async (req, res) => {
   try {
-    const allAttendances = await Attendance.find();
+    const userAttendances = await Attendance.find();
 
-    res.status(200).json({allAttendances});
+    res.status(200).json({userAttendances});
   } catch (error) {
     res.status(500).json({error: 'Something went wrong'});
   }
@@ -122,5 +122,21 @@ app.get('/user/posts', async (req, res) => {
   } catch (error) {
     console.log('Error fetching user posts', error);
     res.status(500).json({message: 'Error fetching user posts'});
+  }
+});
+
+app.delete('/attendance/:attendanceId', async (req, res) => {
+  try {
+    const attendanceId = req.params.attendanceId;
+
+    const deletedAttendance = await Attendance.findByIdAndDelete(attendanceId);
+
+    if (!deletedAttendance) {
+      return res.status(404).json({message: 'Attendance not found'});
+    }
+
+    res.status(200).json({message: 'Attendance deleted successfully'});
+  } catch (error) {
+    res.status(500).json({message: 'Internal server error'});
   }
 });

@@ -20,6 +20,10 @@ const userSchema = new mongoose.Schema({
       ref: 'Attendance',
     },
   ],
+  professor: {
+    type: Boolean,
+    default: false,
+  },
   createdAt: {
     type: Date,
     default: Date.now(),

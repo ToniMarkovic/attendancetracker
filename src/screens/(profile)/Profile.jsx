@@ -3,7 +3,9 @@ import {View, Text, Pressable} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-const Profile = ({navigation}) => {
+const Profile = ({navigation, route}) => {
+  const {user} = route.params;
+
   const removeToken = async () => {
     try {
       await AsyncStorage.removeItem('authToken');
@@ -15,9 +17,12 @@ const Profile = ({navigation}) => {
   return (
     <View style={{padding: 10}}>
       <Text style={{textAlign: 'center', marginTop: 20, fontSize: 24}}>
+        Pozdrav {user.username}
+      </Text>
+      <Text style={{textAlign: 'center', marginTop: 12, fontSize: 16}}>
         Odaberite kolegij
       </Text>
-      <Pressable onPress={() => navigation.navigate('Details')}>
+      <Pressable onPress={() => navigation.navigate('Details', {user: user})}>
         <View
           style={{
             flexDirection: 'row',

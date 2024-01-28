@@ -11,6 +11,16 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {jwtDecode} from 'jwt-decode';
+import {decode, encode} from 'base-64';
+
+if (!global.btoa) {
+  global.btoa = encode;
+}
+
+if (!global.atob) {
+  global.atob = decode;
+}
 
 const Login = ({navigation}) => {
   const [email, setEmail] = React.useState('');
@@ -18,8 +28,8 @@ const Login = ({navigation}) => {
 
   const handleLogin = async () => {
     const user = {
-      email: email,
-      password: password,
+      email: email.trim(),
+      password: password.trim(),
     };
 
     try {
@@ -28,8 +38,9 @@ const Login = ({navigation}) => {
         setEmail('');
         setPassword('');
         if (token) {
+          const decodedToken = jwtDecode(token);
           axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-          navigation.navigate('Profile');
+          navigation.navigate('Profile', {user: decodedToken});
         } else {
           console.log('No token found');
         }

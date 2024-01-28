@@ -1,14 +1,23 @@
 import React from 'react';
-import {View, ScrollView, Text, StyleSheet} from 'react-native';
+import {
+  View,
+  ScrollView,
+  Text,
+  StyleSheet,
+  Pressable,
+  Alert,
+} from 'react-native';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/Ionicons';
 import PieChart from 'react-native-pie-chart';
 
-const Details = () => {
+const Details = ({navigation, route}) => {
   const [attendances, setAttendances] = React.useState([]);
+  const [refreshFlag, setRefreshFlag] = React.useState(false);
+  const {user} = route.params;
 
   const widthAndHeight = 250;
-  const totalClasses = 12;
+  const totalClasses = user.professor ? 80 : 12;
   const totalAttendances = attendances.length;
 
   const percentage = (totalAttendances / totalClasses) * 100;
@@ -19,14 +28,60 @@ const Details = () => {
 
   React.useEffect(() => {
     getAllAttendance();
-  }, []);
+  }, [refreshFlag]);
 
   const getAllAttendance = async () => {
     try {
-      const response = await axios.get('http://192.168.1.181:3001/user/posts');
+      const response = await axios.get(
+        `${
+          user.professor
+            ? 'http://192.168.1.181:3001/attendance'
+            : 'http://192.168.1.181:3001/user/posts'
+        }`,
+      );
       setAttendances(response.data.userAttendances);
     } catch (error) {
       console.log('error', error);
+    }
+  };
+
+  const handleDelete = attendanceId => {
+    Alert.alert(
+      'Obriši evidenciju',
+      'Jeste li sigurni da želite izbrisati evidenciju?',
+      [
+        {
+          text: 'Odustani',
+          style: 'cancel',
+        },
+        {
+          text: 'Izbriši',
+          onPress: () => {
+            deletePost(attendanceId);
+          },
+          style: 'destructive',
+        },
+      ],
+      {cancelable: false},
+    );
+  };
+
+  const deletePost = async attendanceId => {
+    try {
+      const response = await axios.delete(
+        `http://192.168.1.181:3001/attendance/${attendanceId}`,
+      );
+
+      if (response.status === 200) {
+        console.log(`Attendance with ID ${attendanceId} deleted successfully`);
+        console.log('Before setRefreshFlag:', refreshFlag);
+        setRefreshFlag(prevFlag => !prevFlag);
+        console.log('After setRefreshFlag:', !refreshFlag);
+      } else {
+        console.error(`Failed to delete attendance with ID ${attendanceId}`);
+      }
+    } catch (error) {
+      console.error('Error deleting attendance:', error);
     }
   };
 
@@ -34,7 +89,7 @@ const Details = () => {
     <ScrollView style={{padding: 10, flexGrow: 1}}>
       <View>
         <Text style={{textAlign: 'center', fontSize: 24, marginTop: 20}}>
-          Prisutnost Studenta
+          {user.professor ? 'Evidencija' : 'Prisutnost studenta'}
         </Text>
         <View style={{marginTop: 20}}>
           {attendances.map((item, i) => (
@@ -57,6 +112,13 @@ const Details = () => {
                 })}
               </Text>
               <Icon name="checkmark-done-outline" size={25} color="#32de84" />
+              {user.professor && (
+                <Pressable
+                  style={{marginLeft: 12}}
+                  onPress={() => handleDelete(item._id)}>
+                  <Icon name="trash-outline" size={22} color="red" />
+                </Pressable>
+              )}
             </View>
           ))}
         </View>

@@ -19,8 +19,8 @@ const Register = ({navigation}) => {
   const handleRegister = () => {
     const user = {
       name: name,
-      email: email,
-      password: password,
+      email: email.trim(),
+      password: password.trim(),
     };
     console.log(user);
 
