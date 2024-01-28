@@ -15,6 +15,27 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const Login = ({navigation}) => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+  // const [t, setT] = React.useState(null);
+
+  // React.useEffect(() => {
+  //   console.log('useEffect is running');
+  //   const checkLoginStatus = async () => {
+  //     console.log('Checking login status');
+  //     try {
+  //       const token = await AsyncStorage.getItem('authToken');
+  //       if (token) {
+  //         console.log('Token found, navigating to Profile');
+  //       } else {
+  //         console.log('No token found');
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+
+  //   checkLoginStatus();
+  //   console.log('Ovaj useEffect je izvrsen');
+  // }, [t]);
 
   const handleLogin = async () => {
     const user = {
@@ -22,13 +43,18 @@ const Login = ({navigation}) => {
       password: password,
     };
 
+    // setT(1);
+
     try {
       axios.post('http://192.168.1.181:3001/login', user).then(response => {
         const token = response.data.token;
+        if (token) {
+          navigation.navigate('Profile');
+        } else {
+          console.log('No token found');
+        }
         AsyncStorage.setItem('authToken', token);
       });
-
-      navigation.navigate('Profile');
     } catch (error) {
       console.log(error);
     }

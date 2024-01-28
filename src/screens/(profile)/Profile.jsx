@@ -28,7 +28,7 @@ const Profile = ({navigation}) => {
             borderRadius: 10,
           }}>
           <Text style={{flex: 1, color: '#fff', fontSize: 16}}>
-            Ugradbeni Računalni sustavi
+            Ugradbeni Računalni Sustavi
           </Text>
           <Icon name="book-outline" size={25} color="white" />
         </View>
