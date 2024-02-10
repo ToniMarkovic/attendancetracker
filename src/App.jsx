@@ -5,6 +5,7 @@ import Game from './components/Game';
 import Login from './screens/(auth)/Login';
 import Register from './screens/(auth)/Register';
 import Profile from './screens/(profile)/Profile';
+import Classes from './screens/(profile)/Classes';
 import Details from './screens/(profile)/Details';
 import AndroidPrompt from './components/AndroidPrompt';
 import {NavigationContainer} from '@react-navigation/native';
@@ -88,6 +89,8 @@ const App = props => {
           component={Profile}
           options={{title: 'Profile', headerBackVisible: false}}
         />
+
+        <Stack.Screen name="Classes" component={Classes} />
 
         <Stack.Screen
           name="Details"

@@ -10,11 +10,13 @@ import {
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/Ionicons';
 import PieChart from 'react-native-pie-chart';
+import {format} from 'date-fns';
 
 const Details = ({navigation, route}) => {
   const [attendances, setAttendances] = React.useState([]);
+  const [filteredAttendances, setFilteredAttendances] = React.useState([]);
   const [refreshFlag, setRefreshFlag] = React.useState(false);
-  const {user} = route.params;
+  const {user, cls} = route.params;
 
   const widthAndHeight = 250;
   const totalClasses = user.professor ? 80 : 12;
@@ -32,6 +34,26 @@ const Details = ({navigation, route}) => {
     sliceColor = ['#32de84', '#ACE1AF'];
   }
 
+  const filterAttendancesByClassDateRange = (
+    attendances,
+    startDate,
+    endDate,
+  ) => {
+    return attendances.filter(attendance => {
+      const attendanceDateFormatted = format(
+        new Date(attendance.createdAt),
+        'yyyy-MM-dd',
+      );
+      const startDateFormatted = format(startDate, 'yyyy-MM-dd');
+      const endDateFormatted = format(endDate, 'yyyy-MM-dd');
+
+      return (
+        attendanceDateFormatted >= startDateFormatted &&
+        attendanceDateFormatted < endDateFormatted
+      );
+    });
+  };
+
   React.useEffect(() => {
     getAllAttendance();
   }, [refreshFlag]);
@@ -46,6 +68,18 @@ const Details = ({navigation, route}) => {
         }`,
       );
       setAttendances(response.data.userAttendances);
+
+      // Filter
+      const startDate = cls.classStartDate;
+      const endDate = new Date(cls.classEndDate);
+      endDate.setDate(endDate.getDate() + 1);
+      const filtered = filterAttendancesByClassDateRange(
+        response.data.userAttendances,
+        format(startDate, 'yyyy-MM-dd'),
+        format(endDate, 'yyyy-MM-dd'),
+      );
+      // console.log('FILTERED', filtered);
+      setFilteredAttendances(filtered);
     } catch (error) {
       console.log('error', error);
     }
@@ -98,7 +132,7 @@ const Details = ({navigation, route}) => {
           {user.professor ? 'Evidencija' : 'Prisutnost studenta'}
         </Text>
         <View style={{marginTop: 20}}>
-          {attendances.length === 0 ? (
+          {filteredAttendances.length === 0 ? (
             <Text
               style={{
                 textAlign: 'center',
@@ -109,7 +143,7 @@ const Details = ({navigation, route}) => {
                 : 'Nemate evidentiranih dolazaka'}
             </Text>
           ) : (
-            attendances.map((item, i) => (
+            filteredAttendances.map((item, i) => (
               <View
                 key={i}
                 style={{
