@@ -21,8 +21,12 @@ const Details = ({navigation, route}) => {
   const widthAndHeight = 250;
   const totalClasses = user.professor ? 80 : 12;
   const totalAttendances = attendances.length;
+  const totalFilteredAttendances = filteredAttendances.length;
 
-  const percentage = (totalAttendances / totalClasses) * 100;
+  const percentage =
+    ((user.professor ? totalFilteredAttendances : totalAttendances) /
+      totalClasses) *
+    100;
 
   const nonAttendancePercentage = 100 - percentage;
 
@@ -70,15 +74,14 @@ const Details = ({navigation, route}) => {
       setAttendances(response.data.userAttendances);
 
       // Filter
-      const startDate = cls.classStartDate;
-      const endDate = new Date(cls.classEndDate);
+      const startDate = cls?.classStartDate;
+      const endDate = new Date(cls?.classEndDate);
       endDate.setDate(endDate.getDate() + 1);
       const filtered = filterAttendancesByClassDateRange(
         response.data.userAttendances,
         format(startDate, 'yyyy-MM-dd'),
         format(endDate, 'yyyy-MM-dd'),
       );
-      // console.log('FILTERED', filtered);
       setFilteredAttendances(filtered);
     } catch (error) {
       console.log('error', error);
@@ -129,10 +132,10 @@ const Details = ({navigation, route}) => {
     <ScrollView style={{padding: 10, flexGrow: 1}}>
       <View>
         <Text style={{textAlign: 'center', fontSize: 24, marginTop: 20}}>
-          {user.professor ? 'Evidencija' : 'Prisutnost studenta'}
+          {user.professor ? `Evidencija - ${cls.title}` : 'Prisutnost studenta'}
         </Text>
         <View style={{marginTop: 20}}>
-          {filteredAttendances.length === 0 ? (
+          {filteredAttendances.length === 0 && attendances.length === 0 ? (
             <Text
               style={{
                 textAlign: 'center',
@@ -142,8 +145,38 @@ const Details = ({navigation, route}) => {
                 ? 'Nema evidentiranih dolazaka studenata'
                 : 'Nemate evidentiranih dolazaka'}
             </Text>
-          ) : (
+          ) : user.professor ? (
             filteredAttendances.map((item, i) => (
+              <View
+                key={i}
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginTop: 16,
+                  backgroundColor: '#6699CC',
+                  padding: 10,
+                  borderRadius: 10,
+                }}>
+                <Text style={{color: '#fff', flex: 1}}>{item.studentName}</Text>
+                <Text style={{color: '#fff', marginRight: 7}}>
+                  {new Date(item.createdAt).toLocaleDateString('en-US', {
+                    month: 'numeric',
+                    day: 'numeric',
+                    year: 'numeric',
+                  })}
+                </Text>
+                <Icon name="checkmark-done-outline" size={25} color="#32de84" />
+                {user.professor && (
+                  <Pressable
+                    style={{marginLeft: 12}}
+                    onPress={() => handleDelete(item._id)}>
+                    <Icon name="trash-outline" size={22} color="red" />
+                  </Pressable>
+                )}
+              </View>
+            ))
+          ) : (
+            attendances.map((item, i) => (
               <View
                 key={i}
                 style={{
@@ -266,7 +299,8 @@ const Details = ({navigation, route}) => {
           />
           <View style={styles.textContainer}>
             <Text style={styles.text}>
-              {attendances.length}/{totalClasses}
+              {user.professor ? filteredAttendances.length : attendances.length}
+              /{totalClasses}
             </Text>
           </View>
         </View>

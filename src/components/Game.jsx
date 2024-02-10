@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
     alignItems: 'center',
-    marginTop: 40,
+    marginTop: 100,
     gap: 90,
   },
   btn: {

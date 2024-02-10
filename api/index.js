@@ -86,6 +86,19 @@ app.post('/login', async (req, res) => {
 app.post('/attendance', async (req, res) => {
   try {
     const {studentName} = req.body;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const existingAttendance = await Attendance.findOne({
+      studentName: studentName,
+      createdAt: {$gte: today},
+    });
+
+    if (existingAttendance) {
+      return res
+        .status(400)
+        .json({message: 'Attendance already recorded for today'});
+    }
 
     const newAttendance = new Attendance({
       studentName,

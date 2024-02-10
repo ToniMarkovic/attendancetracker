@@ -7,20 +7,18 @@ const Classes = ({navigation, route}) => {
   return (
     <ScrollView style={{padding: 10}}>
       <Text style={{textAlign: 'center', marginTop: 12, fontSize: 24}}>
-        Odaberite predavanje/lab
+        Odaberite predavanje
       </Text>
       {classes.map((cls, index) => (
         <View key={index}>
           <Pressable
             onPress={() => {
-              // Convert Date objects to ISO string representations
               const serializedCls = {
                 ...cls,
                 classStartDate: cls.classStartDate.toISOString(),
                 classEndDate: cls.classEndDate.toISOString(),
               };
 
-              // Pass the serializedCls to navigation
               navigation.navigate('Details', {user: user, cls: serializedCls});
             }}>
             <View

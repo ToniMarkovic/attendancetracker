@@ -69,7 +69,10 @@ const App = props => {
   }
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}>
         <Stack.Screen name="Home" component={Game} />
 
         <Stack.Screen

@@ -31,7 +31,11 @@ const Profile = ({navigation, route}) => {
             flexDirection: 'column',
           }}>
           <Pressable
-            onPress={() => navigation.navigate('Classes', {user: user})}>
+            onPress={() =>
+              navigation.navigate(user.professor ? 'Classes' : 'Details', {
+                user: user,
+              })
+            }>
             <View
               style={{
                 flexDirection: 'row',
@@ -58,7 +62,7 @@ const Profile = ({navigation, route}) => {
           borderRadius: 6,
           marginLeft: 'auto',
           marginRight: 'auto',
-          marginTop: 250,
+          marginTop: 350,
         }}>
         <Text
           style={{
