@@ -2,6 +2,7 @@ import React from 'react';
 import {View, Text, Pressable} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {courses} from '../../constants';
 
 const Profile = ({navigation, route}) => {
   const {user} = route.params;
@@ -22,22 +23,32 @@ const Profile = ({navigation, route}) => {
       <Text style={{textAlign: 'center', marginTop: 12, fontSize: 16}}>
         Odaberite kolegij
       </Text>
-      <Pressable onPress={() => navigation.navigate('Details', {user: user})}>
+      {courses.map((course, index) => (
         <View
+          key={index}
           style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginTop: 40,
-            backgroundColor: '#6699CC',
-            padding: 10,
-            borderRadius: 10,
+            display: 'flex',
+            flexDirection: 'column',
           }}>
-          <Text style={{flex: 1, color: '#fff', fontSize: 16}}>
-            Ugradbeni Računalni Sustavi
-          </Text>
-          <Icon name="book-outline" size={25} color="white" />
+          <Pressable
+            onPress={() => navigation.navigate('Details', {user: user})}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginTop: 25,
+                backgroundColor: '#6699CC',
+                padding: 10,
+                borderRadius: 10,
+              }}>
+              <Text style={{flex: 1, color: '#fff', fontSize: 16}}>
+                {course.name}
+              </Text>
+              <Icon name="book-outline" size={25} color="white" />
+            </View>
+          </Pressable>
         </View>
-      </Pressable>
+      ))}
       <Pressable
         onPress={removeToken}
         style={{
@@ -47,7 +58,7 @@ const Profile = ({navigation, route}) => {
           borderRadius: 6,
           marginLeft: 'auto',
           marginRight: 'auto',
-          marginTop: 350,
+          marginTop: 250,
         }}>
         <Text
           style={{

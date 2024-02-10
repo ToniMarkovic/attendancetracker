@@ -24,7 +24,13 @@ const Details = ({navigation, route}) => {
 
   const nonAttendancePercentage = 100 - percentage;
 
-  const sliceColor = ['#32de84', '#ACE1AF'];
+  let sliceColor = ['#32de84', '#ACE1AF'];
+
+  if (totalAttendances < 9) {
+    sliceColor = ['#ff0000', '#ffaaaa'];
+  } else {
+    sliceColor = ['#32de84', '#ACE1AF'];
+  }
 
   React.useEffect(() => {
     getAllAttendance();
@@ -92,36 +98,130 @@ const Details = ({navigation, route}) => {
           {user.professor ? 'Evidencija' : 'Prisutnost studenta'}
         </Text>
         <View style={{marginTop: 20}}>
-          {attendances.map((item, i) => (
-            <View
-              key={i}
+          {attendances.length === 0 ? (
+            <Text
               style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                marginTop: 16,
-                backgroundColor: '#6699CC',
-                padding: 10,
-                borderRadius: 10,
+                textAlign: 'center',
+                fontWeight: 'bold',
               }}>
-              <Text style={{color: '#fff', flex: 1}}>{item.studentName}</Text>
-              <Text style={{color: '#fff', marginRight: 7}}>
-                {new Date(item.createdAt).toLocaleDateString('en-US', {
-                  month: 'numeric',
-                  day: 'numeric',
-                  year: 'numeric',
-                })}
-              </Text>
-              <Icon name="checkmark-done-outline" size={25} color="#32de84" />
-              {user.professor && (
-                <Pressable
-                  style={{marginLeft: 12}}
-                  onPress={() => handleDelete(item._id)}>
-                  <Icon name="trash-outline" size={22} color="red" />
-                </Pressable>
-              )}
-            </View>
-          ))}
+              {user.professor
+                ? 'Nema evidentiranih dolazaka studenata'
+                : 'Nemate evidentiranih dolazaka'}
+            </Text>
+          ) : (
+            attendances.map((item, i) => (
+              <View
+                key={i}
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginTop: 16,
+                  backgroundColor: '#6699CC',
+                  padding: 10,
+                  borderRadius: 10,
+                }}>
+                <Text style={{color: '#fff', flex: 1}}>{item.studentName}</Text>
+                <Text style={{color: '#fff', marginRight: 7}}>
+                  {new Date(item.createdAt).toLocaleDateString('en-US', {
+                    month: 'numeric',
+                    day: 'numeric',
+                    year: 'numeric',
+                  })}
+                </Text>
+                <Icon name="checkmark-done-outline" size={25} color="#32de84" />
+                {user.professor && (
+                  <Pressable
+                    style={{marginLeft: 12}}
+                    onPress={() => handleDelete(item._id)}>
+                    <Icon name="trash-outline" size={22} color="red" />
+                  </Pressable>
+                )}
+              </View>
+            ))
+          )}
         </View>
+        {!user.professor && (
+          <View
+            style={{
+              marginTop: 20,
+            }}>
+            <Text
+              style={{
+                textAlign: 'center',
+                fontSize: 16,
+              }}>
+              {user.professor ? '' : 'Obavezni ste doći na 9 / 12 rezervacija'}
+            </Text>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                marginTop: 40,
+                gap: 50,
+              }}>
+              <View
+                style={{
+                  alignItems: 'center',
+                }}>
+                <View
+                  style={{
+                    height: 20,
+                    width: 20,
+                    borderRadius: 50,
+                    overflow: 'hidden',
+                    flexDirection: 'row',
+                  }}>
+                  <View
+                    style={{
+                      flex: 1,
+                      backgroundColor: '#ffaaaa',
+                    }}
+                  />
+                  <View
+                    style={{
+                      flex: 1,
+                      backgroundColor: '#ff0000',
+                    }}
+                  />
+                </View>
+                <Text
+                  style={{
+                    textAlign: 'center',
+                  }}>
+                  Nezadovoljeno
+                </Text>
+              </View>
+              <View
+                style={{
+                  alignItems: 'center',
+                }}>
+                <View
+                  style={{
+                    height: 20,
+                    width: 20,
+                    borderRadius: 50,
+                    overflow: 'hidden',
+                    flexDirection: 'row',
+                  }}>
+                  <View
+                    style={{
+                      flex: 1,
+                      backgroundColor: '#ACE1AF',
+                    }}
+                  />
+                  <View
+                    style={{
+                      flex: 1,
+                      backgroundColor: '#32de84',
+                    }}
+                  />
+                </View>
+                <Text>Zadovoljeno</Text>
+              </View>
+            </View>
+          </View>
+        )}
         <View style={styles.container}>
           <PieChart
             widthAndHeight={widthAndHeight}
@@ -145,7 +245,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    marginTop: 80,
+    marginTop: 50,
+    marginBottom: 40,
     position: 'relative',
   },
   title: {
