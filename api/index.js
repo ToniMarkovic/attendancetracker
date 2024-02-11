@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const crypto = require('crypto');
 const cors = require('cors');
+const bcrypt = require('bcryptjs');
 
 const app = express();
 app.use(cors());
@@ -41,10 +42,12 @@ app.post('/register', async (req, res) => {
       console.log('Email is already registered');
     }
 
+    const hashedPassword = await bcrypt.hash(password, 12);
+
     const newUser = new User({
       name,
       email,
-      password,
+      password: hashedPassword,
     });
 
     await newUser.save();
@@ -67,7 +70,8 @@ app.post('/login', async (req, res) => {
       return res.status(401).json({message: 'Invalid email'});
     }
 
-    if (user.password !== password) {
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
       return res.status(401).json({message: 'Invalid password'});
     }
 
