@@ -7,8 +7,6 @@
 * [Features](#features)
 * [Screenshots](#screenshots)
 * [Project Status](#project-status)
-* [Room for Improvement](#room-for-improvement)
-* [Acknowledgements](#acknowledgements)
 
 
 ## General Information
@@ -35,7 +33,7 @@ Attendance tracking application that allows users and professors to get details 
 
 
 ## Screenshots
-![002](https://github.com/ToniMarkovic/attendancetracker/assets/92318672/fe5000f2-0128-427c-8a73-9110923e0442)
+<img src="https://github.com/ToniMarkovic/attendancetracker/assets/92318672/fe5000f2-0128-427c-8a73-9110923e0442" width="100" height="200"
 
 
 ## Project Status
