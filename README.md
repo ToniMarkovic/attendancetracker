@@ -33,7 +33,7 @@ Attendance tracking application that allows users and professors to get details 
 
 
 ## Screenshots
-<img src="https://github.com/ToniMarkovic/attendancetracker/assets/92318672/fe5000f2-0128-427c-8a73-9110923e0442" width="100" height="200"
+<img src="https://github.com/ToniMarkovic/attendancetracker/assets/92318672/fe5000f2-0128-427c-8a73-9110923e0442" width="100" height="200">
 
 
 ## Project Status
